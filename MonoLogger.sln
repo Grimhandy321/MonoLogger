@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35818.85 d17.13
+VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoLogger", "MonoLogger\MonoLogger.csproj", "{01FD8B92-916F-4F3A-8461-D1128217FE5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{D62E51E2-D831-40DC-AF2E-25E811FF5510}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{01FD8B92-916F-4F3A-8461-D1128217FE5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01FD8B92-916F-4F3A-8461-D1128217FE5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01FD8B92-916F-4F3A-8461-D1128217FE5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D62E51E2-D831-40DC-AF2E-25E811FF5510}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D62E51E2-D831-40DC-AF2E-25E811FF5510}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D62E51E2-D831-40DC-AF2E-25E811FF5510}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D62E51E2-D831-40DC-AF2E-25E811FF5510}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
