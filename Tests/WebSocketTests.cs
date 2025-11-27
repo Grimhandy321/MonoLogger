@@ -27,7 +27,6 @@ namespace Tests
             string reply = Encoding.UTF8.GetString(receiveBuffer, 0, result.Count);
             Assert.Contains("accomplished", reply);
 
-            // Close
             await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "done", CancellationToken.None);
         }
 
