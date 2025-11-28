@@ -3,19 +3,35 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.WebSockets;
 using System.Text;
 
-
 namespace Monologetr.Controllers
 {
+    /// <summary>
+    /// WebSocket controller for handling real-time messages.
+    /// </summary>
+    /// <author>Michal Příhoda</author>
     [Route("ws")]
     public class WebSocketController : ControllerBase
     {
         private readonly MessageQueue _queue;
 
+        /// <summary>
+        /// Constructor for WebSocketController.
+        /// </summary>
+        /// <param name="queue">Injected message queue.</param>
+        /// <author>Michal Příhoda</author>
         public WebSocketController(MessageQueue queue)
         {
             _queue = queue;
         }
 
+        /// <summary>
+        /// Handles WebSocket connections and message exchange.
+        /// </summary>
+        /// <remarks>
+        /// Accepts WebSocket requests and processes incoming messages by enqueuing them.
+        /// Replies with "accomplished" for each received message.
+        /// </remarks>
+        /// <author>Michal Příhoda</author>
         [HttpGet]
         public async Task Get()
         {
@@ -42,7 +58,6 @@ namespace Monologetr.Controllers
                 }
 
                 var text = Encoding.UTF8.GetString(buffer, 0, result.Count);
-
 
                 _queue.Queue.Enqueue(text);
 
