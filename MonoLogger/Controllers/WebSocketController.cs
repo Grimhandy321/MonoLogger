@@ -58,8 +58,22 @@ namespace Monologetr.Controllers
                 }
 
                 var text = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
 
-                _queue.Queue.Enqueue(text);
+                Message? message = JsonSerializer.Deserialize<Message>(text, options);
+
+                if (message == null)
+                {
+                    var errorReply = Encoding.UTF8.GetBytes("invalid_message_format");
+                    await socket.SendAsync(errorReply, WebSocketMessageType.Text, true, CancellationToken.None);
+                    continue;
+                }
+
+ 
+                _queue.Queue.Enqueue(message);
 
                 var reply = Encoding.UTF8.GetBytes("accomplished");
                 await socket.SendAsync(reply, WebSocketMessageType.Text, true, CancellationToken.None);

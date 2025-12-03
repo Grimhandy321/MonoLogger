@@ -1,5 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+
+public enum MessageType
+{
+    Error,
+    Message,
+    Warning,
+}
+
 namespace Monologer.Entities
 {
     public class Message
@@ -9,6 +17,9 @@ namespace Monologer.Entities
 
         public string Text { get; set; } = string.Empty;
 
+        public int Magnitude { get; set; } = 0;
+
         public DateTime CreatedAt { get; set; }
+        public MessageType Type { get; set; }
     }
 }

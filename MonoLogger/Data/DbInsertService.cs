@@ -25,17 +25,13 @@ namespace Monologer.Data
         /// </summary>
         /// <param name="msg">The message text to insert.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        public async Task InsertMessageAsync(string msg)
+        public async Task InsertMessageAsync(Message message)
         {
             using var db = _factory.CreateDbContext();
 
-            var item = new Message
-            {
-                Text = msg,
-                CreatedAt = DateTime.UtcNow
-            };
+            message.CreatedAt = DateTime.UtcNow;
 
-            db.WebSocketMessages.Add(item);
+            db.WebSocketMessages.Add(message);
             await db.SaveChangesAsync();
         }
     }
