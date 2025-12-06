@@ -10,11 +10,13 @@ namespace Tests
     public class WebSocketIntegrationTests
     {
         private readonly string _url = "ws://localhost:5151/ws";
+        private readonly string _token = "unitTestToken";
 
         [Fact]
         public async Task WebSocket_ShouldConnect_SendMessage_ReceiveResponse()
         {
             using var ws = new ClientWebSocket();
+            ws.Options.SetRequestHeader("Authorization",_token );
 
             await ws.ConnectAsync(new Uri(_url), CancellationToken.None);
             Assert.Equal(WebSocketState.Open, ws.State);
@@ -43,6 +45,7 @@ namespace Tests
                 {
                     using var ws = new ClientWebSocket();
                     await ws.ConnectAsync(new Uri(_url), CancellationToken.None);
+                    ws.Options.SetRequestHeader("Authorization", _token);
                     Assert.Equal(WebSocketState.Open, ws.State);
 
                     string msg = $"hello-{id}";

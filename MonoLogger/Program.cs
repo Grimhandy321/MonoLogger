@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Monologer.Data;
 using Monologer.Services;
+using MonoLogger.MIddleware;
 
 namespace MonoLogger
 {
@@ -29,7 +30,7 @@ namespace MonoLogger
             builder.Services.AddSingleton<WorkerPool>();
 
             var app = builder.Build();
-
+            app.UseMiddleware<TokenAuthMiddleware>();
             // Configure the HTTP request pipeline.
             app.UseWebSockets(); // necessary for WebSocket support (not default ins Asp.Net )
             app.UseHttpsRedirection();

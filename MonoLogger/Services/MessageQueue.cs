@@ -1,9 +1,10 @@
-﻿using System.Collections.Concurrent;
+﻿using Monologer.Entities;
+using System.Collections.Concurrent;
 
 namespace Monologer.Services
 {
     public class MessageQueue
     {
-        public ConcurrentQueue<string> Queue { get; } = new();
+        public ConcurrentQueue<Message> Queue { get; } = new();
     }
 }
