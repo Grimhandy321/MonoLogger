@@ -4,6 +4,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using Monologer.Entities;
+using MonoLogger.Entities;
 
 namespace Monologetr.Controllers
 {
@@ -73,8 +74,18 @@ namespace Monologetr.Controllers
                     await socket.SendAsync(errorReply, WebSocketMessageType.Text, true, CancellationToken.None);
                     continue;
                 }
+                var user = HttpContext.Items["User"] as User;
 
- 
+                if (user == null)
+                {
+                    var errorReply = Encoding.UTF8.GetBytes("unauthorized");
+                    await socket.SendAsync(errorReply, WebSocketMessageType.Text, true, CancellationToken.None);
+                    continue;
+                }
+                message.User = user;
+                message.UserId = user.Id;
+
+                // Enqueue
                 _queue.Queue.Enqueue(message);
 
                 var reply = Encoding.UTF8.GetBytes("accomplished");

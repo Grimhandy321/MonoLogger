@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
+using Microsoft.Extensions.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,17 @@ namespace Tests
 {
     public class AuthTest
     {
+
+        private readonly IConfiguration _config;
+
+        public AuthTest()
+        {
+            _config = new ConfigurationBuilder()
+           .SetBasePath(AppContext.BaseDirectory)
+           .AddJsonFile("../MonoLogger/appsettings.json", optional: false, reloadOnChange: false)
+           .AddJsonFile("../MonoLogger/appsettings.Development.json", optional: true)
+           .Build();
+        }
 
         private readonly string _url = "ws://localhost:5151/ws";
         [Fact]
