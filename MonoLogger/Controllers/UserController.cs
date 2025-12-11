@@ -32,7 +32,7 @@ namespace MonoLogger.Controllers
             };
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
-            return Ok(new { AccessKey = user.AccessKey });
+            return Ok(new { accessKey = user.AccessKey });
         }
     }
 }
