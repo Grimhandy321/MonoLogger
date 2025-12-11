@@ -5,8 +5,6 @@ namespace Tests
 {
     public class AuthTest : AbstractTest
     {
-
-
         [Fact]
         public async Task WebSocket_ShouldRefuseConnection_WhenTokenInvalid()
         {
@@ -14,10 +12,9 @@ namespace Tests
 
             ws.Options.SetRequestHeader("Authorization", "totallyWrongToken");
 
-            var exception = await Assert.ThrowsAsync<WebSocketException>(async () =>
-            {
-                await ws.ConnectAsync(new Uri(_url), CancellationToken.None);
-            });
+            var exception = await Assert.ThrowsAsync<WebSocketException>(() =>
+                ws.ConnectAsync(new Uri(_url), CancellationToken.None)
+            );
 
             Assert.Contains("401", exception.Message, StringComparison.OrdinalIgnoreCase);
         }
@@ -27,10 +24,9 @@ namespace Tests
         {
             using var ws = new ClientWebSocket();
 
-            var exception = await Assert.ThrowsAsync<WebSocketException>(async () =>
-            {
-                await ws.ConnectAsync(new Uri(_url), CancellationToken.None);
-            });
+            var exception = await Assert.ThrowsAsync<WebSocketException>(() =>
+                ws.ConnectAsync(new Uri(_url), CancellationToken.None)
+            );
 
             Assert.Contains("401", exception.Message, StringComparison.OrdinalIgnoreCase);
         }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using Monologer.Entities;
 using MonoLogger.Entities;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Monologetr.Controllers
 {
@@ -17,34 +18,45 @@ namespace Monologetr.Controllers
     {
         private readonly MessageQueue _queue;
 
-        /// <summary>
-        /// Constructor for WebSocketController.
-        /// </summary>
-        /// <param name="queue">Injected message queue.</param>
-        /// <author>Michal Příhoda</author>
         public WebSocketController(MessageQueue queue)
         {
             _queue = queue;
         }
 
         /// <summary>
-        /// Handles WebSocket connections and message exchange.
+        /// Initiates a WebSocket upgrade and starts the real-time messaging loop.
         /// </summary>
         /// <remarks>
-        /// Accepts WebSocket requests and processes incoming messages by enqueuing them.
-        /// Replies with "accomplished" for each received message.
+        /// This endpoint appears in Swagger and can be called normally.
+        /// If the request is a WebSocket upgrade request, the connection will be upgraded.
         /// </remarks>
-        /// <author>Michal Příhoda</author>
-        [HttpGet]
-        public async Task Get()
+        /// <returns>A status message or an upgraded WebSocket session.</returns>
+        [HttpGet("connect")]
+        [SwaggerOperation(
+            Summary = "Connect to WebSocket server",
+            Description = "Initiates the WebSocket handshake and starts receiving messages."
+        )]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Connect()
         {
+            // If not a WebSocket request (normal HTTP) → show info in Swagger
             if (!HttpContext.WebSockets.IsWebSocketRequest)
             {
-                HttpContext.Response.StatusCode = 400;
-                return;
+                return Ok("WebSocket endpoint ready. Use ws://yourserver/ws/connect");
             }
 
+            // Handle websocket
             var socket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+            await HandleWebSocket(socket);
+            return new EmptyResult();
+        }
+
+        /// <summary>
+        /// Handles WebSocket message loop.
+        /// </summary>
+        private async Task HandleWebSocket(WebSocket socket)
+        {
             var buffer = new byte[4096];
 
             while (socket.State == WebSocketState.Open)
@@ -61,36 +73,36 @@ namespace Monologetr.Controllers
                 }
 
                 var text = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                };
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-                Message? message = JsonSerializer.Deserialize<Message>(text, options);
+                var message = JsonSerializer.Deserialize<Message>(text, options);
 
                 if (message == null)
                 {
-                    var errorReply = Encoding.UTF8.GetBytes("invalid_message_format");
-                    await socket.SendAsync(errorReply, WebSocketMessageType.Text, true, CancellationToken.None);
+                    await SendText(socket, "invalid_message_format");
                     continue;
                 }
-                var user = HttpContext.Items["User"] as User;
 
+                var user = HttpContext.Items["User"] as User;
                 if (user == null)
                 {
-                    var errorReply = Encoding.UTF8.GetBytes("unauthorized");
-                    await socket.SendAsync(errorReply, WebSocketMessageType.Text, true, CancellationToken.None);
+                    await SendText(socket, "unauthorized");
                     continue;
                 }
+
                 message.User = user;
                 message.UserId = user.Id;
 
-                // Enqueue
                 _queue.Queue.Enqueue(message);
 
-                var reply = Encoding.UTF8.GetBytes("accomplished");
-                await socket.SendAsync(reply, WebSocketMessageType.Text, true, CancellationToken.None);
+                await SendText(socket, "accomplished");
             }
+        }
+
+        private async Task SendText(WebSocket socket, string message)
+        {
+            var reply = Encoding.UTF8.GetBytes(message);
+            await socket.SendAsync(reply, WebSocketMessageType.Text, true, CancellationToken.None);
         }
     }
 }
