@@ -56,7 +56,7 @@ namespace MonoLogger.MIddleware
         private async Task<bool> ValidateTokenAsync(string token)
         {
             // Allow a test token for unit testing
-            if (token == "unitTestToken")
+            if (token == (_config["UnitTest:authTestToken"] ?? "testToken"))
                 return true;
 
             // Ensure numeric representation

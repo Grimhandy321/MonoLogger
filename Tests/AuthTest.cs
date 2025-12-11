@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.WebSockets;
+﻿using System.Net.WebSockets;
 using Microsoft.Extensions.Configuration;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tests
 {
@@ -15,11 +10,15 @@ namespace Tests
 
         public AuthTest()
         {
+            var solutionDir = Path.GetFullPath(
+                    Path.Combine(AppContext.BaseDirectory, "../../../../")
+                );
+
             _config = new ConfigurationBuilder()
-           .SetBasePath(AppContext.BaseDirectory)
-           .AddJsonFile("../MonoLogger/appsettings.json", optional: false, reloadOnChange: false)
-           .AddJsonFile("../MonoLogger/appsettings.Development.json", optional: true)
-           .Build();
+                .SetBasePath(solutionDir)
+                .AddJsonFile("MonoLogger/appsettings.json", optional: false)
+                .AddJsonFile("MonoLogger/appsettings.Development.json", optional: true)
+                .Build();
         }
 
         private readonly string _url = "ws://localhost:5151/ws";

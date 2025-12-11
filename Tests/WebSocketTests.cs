@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
@@ -10,13 +11,30 @@ namespace Tests
     public class WebSocketIntegrationTests
     {
         private readonly string _url = "ws://localhost:5151/ws";
-        private readonly string _token = "unitTestToken";
+        private string _token;
+
+
+
+        private readonly IConfiguration _config;
+
+        public WebSocketIntegrationTests()
+        {
+            var solutionDir = Path.GetFullPath(
+                Path.Combine(AppContext.BaseDirectory, "../../../../")
+            );
+
+            _config = new ConfigurationBuilder()
+                .SetBasePath(solutionDir)
+                .AddJsonFile("MonoLogger/appsettings.json", optional: false)
+                .AddJsonFile("MonoLogger/appsettings.Development.json", optional: true)
+                .Build();
+        }
 
         [Fact]
         public async Task WebSocket_ShouldConnect_SendMessage_ReceiveResponse()
         {
             using var ws = new ClientWebSocket();
-            ws.Options.SetRequestHeader("Authorization",_token );
+            ws.Options.SetRequestHeader("Authorization", _token);
 
             await ws.ConnectAsync(new Uri(_url), CancellationToken.None);
             Assert.Equal(WebSocketState.Open, ws.State);
