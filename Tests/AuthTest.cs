@@ -3,25 +3,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace Tests
 {
-    public class AuthTest
+    public class AuthTest : AbstractTest
     {
 
-        private readonly IConfiguration _config;
 
-        public AuthTest()
-        {
-            var solutionDir = Path.GetFullPath(
-                    Path.Combine(AppContext.BaseDirectory, "../../../../")
-                );
-
-            _config = new ConfigurationBuilder()
-                .SetBasePath(solutionDir)
-                .AddJsonFile("MonoLogger/appsettings.json", optional: false)
-                .AddJsonFile("MonoLogger/appsettings.Development.json", optional: true)
-                .Build();
-        }
-
-        private readonly string _url = "ws://localhost:5151/ws";
         [Fact]
         public async Task WebSocket_ShouldRefuseConnection_WhenTokenInvalid()
         {

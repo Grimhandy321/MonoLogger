@@ -8,27 +8,9 @@ using System.Threading.Tasks;
 
 namespace Tests
 {
-    public class WebSocketIntegrationTests
+    public class WebSocketIntegrationTests : AbstractTest
     {
-        private readonly string _url = "ws://localhost:5151/ws";
-        private string _token;
 
-
-
-        private readonly IConfiguration _config;
-
-        public WebSocketIntegrationTests()
-        {
-            var solutionDir = Path.GetFullPath(
-                Path.Combine(AppContext.BaseDirectory, "../../../../")
-            );
-
-            _config = new ConfigurationBuilder()
-                .SetBasePath(solutionDir)
-                .AddJsonFile("MonoLogger/appsettings.json", optional: false)
-                .AddJsonFile("MonoLogger/appsettings.Development.json", optional: true)
-                .Build();
-        }
 
         [Fact]
         public async Task WebSocket_ShouldConnect_SendMessage_ReceiveResponse()
