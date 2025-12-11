@@ -16,17 +16,17 @@ namespace MonoLogger.Controllers
 
         [HttpPost]
         [Route("api/users/create")]
-        public async Task<IActionResult> CreateUser([FromBody] string name)
+        public async Task<IActionResult> CreateUser([FromForm] User user)
         {
             var random = new Random();
             int accessKey;
-            if (await _dbContext.Users.AnyAsync(u => u.Name == name))
+            if (await _dbContext.Users.AnyAsync(u => u.Name == user.Name))
                 return Conflict(new { error = " User with this name already exists." });
             do
             {
                 accessKey = random.Next(100000, 999999);
             } while (await _dbContext.Users.AnyAsync(u => u.AccessKey == accessKey));
-            var user = new User
+            user = new User
             {
                 AccessKey = accessKey
             };

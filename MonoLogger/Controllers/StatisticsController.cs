@@ -24,7 +24,7 @@ namespace MonoLogger.Controllers
                 {
                     TotalMessages = g.Count(),
                     ErrorCount = g.Count(m => m.Type == MessageType.Error),
-                    MessageCount = g.Count(m => m.Type == MessageType.Message),
+                    MessageCount = g.Count(m => m.Type == MessageType.Info),
                     WarningCount = g.Count(m => m.Type == MessageType.Warning),
                     AvgMagnitude = g.Average(m => (double?)m.Magnitude) ?? 0,
                     MaxMagnitude = g.Max(m => (int?)m.Magnitude) ?? 0,
@@ -47,7 +47,7 @@ namespace MonoLogger.Controllers
                     UserId = g.Key,
                     TotalMessages = g.Count(),
                     Errors = g.Count(m => m.Type == MessageType.Error),
-                    Messages = g.Count(m => m.Type == MessageType.Message),
+                    Messages = g.Count(m => m.Type == MessageType.Info),
                     Warnings = g.Count(m => m.Type == MessageType.Warning),
                     AvgMagnitude = g.Average(m => (double?)m.Magnitude) ?? 0,
                     FirstMessage = g.Min(m => m.CreatedAt),
@@ -69,7 +69,7 @@ namespace MonoLogger.Controllers
                     Date = g.Key,
                     TotalMessages = g.Count(),
                     Errors = g.Count(m => m.Type == MessageType.Error),
-                    Messages = g.Count(m => m.Type == MessageType.Message),
+                    Messages = g.Count(m => m.Type == MessageType.Info),
                     Warnings = g.Count(m => m.Type == MessageType.Warning),
                     AvgMagnitude = g.Average(m => (double?)m.Magnitude) ?? 0
                 })
