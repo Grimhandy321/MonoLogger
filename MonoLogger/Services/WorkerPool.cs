@@ -37,7 +37,7 @@ namespace Monologer.Services
             {
                 var thread = new Thread(async () => await WorkerLoop())
                 {
-                    IsBackground = false, // will run if the main program exits
+                    IsBackground = false,
                     Name = $"worker-{i}"
                 };
                 thread.Start();
