@@ -11,7 +11,7 @@ namespace Tests
             using var ws = new ClientWebSocket();
 
             ws.Options.SetRequestHeader("Authorization", "totallyWrongToken");
-
+            Assert.Equal("asd", _url);
             var exception = await Assert.ThrowsAsync<WebSocketException>(() =>
                 ws.ConnectAsync(new Uri(_url), CancellationToken.None)
             );

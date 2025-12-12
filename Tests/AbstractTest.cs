@@ -26,7 +26,7 @@ namespace Tests
                 .Build();
 
             _url = _config["UnitTest:authTestToken"] ?? "ws://localhost:5151/ws";
-            _token = _config["UnitTest:authTestToken"] ?? "testToken";
+            _token = _config["UnitTest:testUrl"] ?? "testToken";
         }
 
     }
