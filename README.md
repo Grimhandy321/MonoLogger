@@ -11,9 +11,12 @@ net ef
 MSSQL
 
 ## (jen ucitelských pc )
+instalace .net ef tools 
+```bash
+cd Monologer
 dotnet new tool-manifest
 dotnet tool install --local dotnet-ef --version 5.0.6
-
+```
 ## Instalace
 
 1. Klonujte repozitář:
