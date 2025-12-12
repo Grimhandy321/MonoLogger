@@ -6,9 +6,17 @@
 
 ## Předpoklady
 
+net ef
 .net 9
 MSSQL
 
+## (jen na ucitelských pc )
+instalace .net ef tools 
+```bash
+cd Monologer
+dotnet new tool-manifest
+dotnet tool install --local dotnet-ef --version 9.0.11
+```
 ## Instalace
 
 1. Klonujte repozitář:
