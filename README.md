@@ -10,7 +10,7 @@ net ef
 .net 9
 MSSQL
 
-## (jen ucitelských pc )
+## (jen na ucitelských pc )
 instalace .net ef tools 
 ```bash
 cd Monologer
