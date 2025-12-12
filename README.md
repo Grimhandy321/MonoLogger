@@ -10,6 +10,10 @@ net ef
 .net 9
 MSSQL
 
+## (jen ucitelských pc )
+dotnet new tool-manifest
+dotnet tool install --local dotnet-ef --version 5.0.6
+
 ## Instalace
 
 1. Klonujte repozitář:
