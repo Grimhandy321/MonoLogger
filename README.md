@@ -6,6 +6,7 @@
 
 ## Předpoklady
 
+net ef
 .net 9
 MSSQL
 
