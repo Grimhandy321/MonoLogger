@@ -15,7 +15,7 @@ instalace .net ef tools
 ```bash
 cd Monologer
 dotnet new tool-manifest
-dotnet tool install --local dotnet-ef --version 5.0.6
+dotnet tool install --local dotnet-ef --version 9.0.11
 ```
 ## Instalace
 
