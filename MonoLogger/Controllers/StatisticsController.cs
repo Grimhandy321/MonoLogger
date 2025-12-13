@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Monologer.Data;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace MonoLogger.Controllers
 {

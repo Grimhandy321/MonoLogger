@@ -28,8 +28,17 @@ namespace MonoLogger
                 if (File.Exists(xmlPath))
                     options.IncludeXmlComments(xmlPath);
             });
-
-
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials()
+                        .SetIsOriginAllowed(_ => true); // dev only
+                });
+            });
             // database connection
             builder.Services.AddDbContextFactory<AppDbContext>(options =>
             {
@@ -42,6 +51,9 @@ namespace MonoLogger
             builder.Services.AddSingleton<WorkerPool>();
 
             var app = builder.Build();
+
+            app.UseCors("AllowAll");
+
             app.UseMiddleware<TokenAuthMiddleware>();
                if (app.Environment.IsDevelopment() || true)
             {
