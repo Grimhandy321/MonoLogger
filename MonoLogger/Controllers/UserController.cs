@@ -9,6 +9,7 @@ namespace MonoLogger.Controllers
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _dbContext;
+        private static Random random = new Random();
 
         public UserController(AppDbContext dbContext) {
             _dbContext = dbContext;
@@ -19,12 +20,12 @@ namespace MonoLogger.Controllers
         public async Task<IActionResult> CreateUser([FromForm] User user)
         {
             var random = new Random();
-            int accessKey;
+            string accessKey;
             if (await _dbContext.Users.AnyAsync(u => u.Name == user.Name))
                 return Conflict(new { error = " User with this name already exists." });
             do
             {
-                accessKey = random.Next(100000, 999999);
+                accessKey = RandomString(17);
             } while (await _dbContext.Users.AnyAsync(u => u.AccessKey == accessKey));
             user = new User
             {
@@ -33,6 +34,15 @@ namespace MonoLogger.Controllers
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
             return Ok(new { accessKey = user.AccessKey });
+        }
+
+   
+
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

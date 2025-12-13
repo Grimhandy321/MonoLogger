@@ -30,7 +30,7 @@ namespace Monologer.Entities
 
         [JsonIgnore]
         [SwaggerSchema(ReadOnly = true)]
-        public User User { get; set; }
+        public User User { get; set; } = null;
         [JsonIgnore]
         [SwaggerSchema(ReadOnly = true)]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

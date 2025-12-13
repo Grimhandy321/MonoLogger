@@ -18,7 +18,14 @@ namespace Monologer.Data
                 .WithMany(u => u.Messages)
                 .HasForeignKey(m => m.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-        }
 
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Name = "System",
+                    AccessKey = "unitestToken"
+                });
+        }
     }
 }

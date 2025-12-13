@@ -58,13 +58,9 @@ namespace MonoLogger.MIddleware
             if (token == (_config["UnitTest:authTestToken"] ?? "testToken"))
                 return true;
 
-            // Ensure numeric representation
-            if (!int.TryParse(token, out int tokenValue))
-                return false;
-
             using var db = await _dbFactory.CreateDbContextAsync();
 
-            return await db.Users.AnyAsync(u => u.AccessKey == tokenValue);
+            return await db.Users.AnyAsync(u => u.AccessKey == token);
         }
     }
 }

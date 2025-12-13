@@ -18,9 +18,9 @@ namespace MonoLogger.Entities
         [Required]
         [JsonIgnore]
         [SwaggerSchema(ReadOnly = true, WriteOnly = true)]
-        public int AccessKey { get; set; }
+        public string AccessKey { get; set; } = string.Empty;
 
- 
+
         [JsonIgnore]
         [SwaggerSchema(ReadOnly = true, WriteOnly = true)]
         public List<Message> Messages { get; set; } = new();

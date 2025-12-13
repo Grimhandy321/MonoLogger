@@ -40,12 +40,6 @@ namespace Monologetr.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Connect()
         {
-            // If not a WebSocket request (normal HTTP) → show info in Swagger
-            if (!HttpContext.WebSockets.IsWebSocketRequest)
-            {
-                return Ok("WebSocket endpoint ready. Use ws://yourserver/ws/connect");
-            }
-
             // Handle websocket
             var socket = await HttpContext.WebSockets.AcceptWebSocketAsync();
             await HandleWebSocket(socket);
@@ -95,7 +89,7 @@ namespace Monologetr.Controllers
                 var user = HttpContext.Items["User"] as User;
                 if (user == null)
                 {
-                    await SendText(socket, "unauthorized");
+                    await SendText(socket, "userNotfound");
                     continue;
                 }
 

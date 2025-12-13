@@ -7,6 +7,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Tests.Helpers;
 
 namespace Tests
 {
@@ -22,10 +23,9 @@ namespace Tests
 
             Assert.Equal(WebSocketState.Open, ws.State);
 
-            string msg = "test-message";
-            byte[] sendBuffer = Encoding.UTF8.GetBytes(msg);
+            byte[] buffer = MessageFactory.CreateMessageBuffer("testMessage");
 
-            await ws.SendAsync(sendBuffer, WebSocketMessageType.Text, true, CancellationToken.None);
+            await ws.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
 
             var receiveBuffer = new byte[4096];
             var result = await ws.ReceiveAsync(receiveBuffer, CancellationToken.None);
@@ -51,20 +51,8 @@ namespace Tests
 
                     await ws.ConnectAsync(new Uri(_url), CancellationToken.None);
                     Assert.Equal(WebSocketState.Open, ws.State);
-                    string msgJson;
-                    {
-                        var message = new Message
-                        {
-                            Text = $"hello-{Guid.NewGuid()}",
-                            Magnitude = 1,
-                            Type = MessageType.Info
-                        };
-
-                        msgJson = JsonSerializer.Serialize(message);
-                    }
-
-                    byte[] buffer = Encoding.UTF8.GetBytes(msgJson);
-
+                    byte[] buffer = MessageFactory.CreateMessageBuffer("testMessage");
+              
                     await ws.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
 
                     await ws.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
