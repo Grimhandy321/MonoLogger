@@ -93,7 +93,6 @@ namespace Monologetr.Controllers
                     continue;
                 }
 
-                message.User = user;
                 message.UserId = user.Id;
 
                 _queue.Queue.Enqueue(message);

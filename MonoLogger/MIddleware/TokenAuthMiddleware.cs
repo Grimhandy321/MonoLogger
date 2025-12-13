@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Monologer.Data;
+using MonoLogger.Entities;
 using System.IO;
 
 namespace MonoLogger.MIddleware
@@ -18,10 +19,12 @@ namespace MonoLogger.MIddleware
             _next = next;
             _dbFactory = dbFactory;
             _config = config;
+ 
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
+
             var authHeader = context.Request.Headers["Authorization"].ToString();
 
             var path = context.Request.Path.Value;
@@ -49,15 +52,19 @@ namespace MonoLogger.MIddleware
                 return;
             }
 
+            await using var db = await _dbFactory.CreateDbContextAsync();
+
+            var user = await db.Users
+                .FirstOrDefaultAsync(u => u.AccessKey == tokenString);
+
+            context.Items["User"] = db.Users.FirstOrDefault(u => u.AccessKey == tokenString);
+
             await _next(context);
         }
 
         private async Task<bool> ValidateTokenAsync(string token)
         {
             // Allow a test token for unit testing
-            if (token == (_config["UnitTest:authTestToken"] ?? "testToken"))
-                return true;
-
             using var db = await _dbFactory.CreateDbContextAsync();
 
             return await db.Users.AnyAsync(u => u.AccessKey == token);
