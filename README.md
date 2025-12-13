@@ -6,9 +6,17 @@
 
 ## Předpoklady
 
+net ef
 .net 9
 MSSQL
 
+## (jen na ucitelských pc )
+instalace .net ef tools 
+```bash
+cd Monologer
+dotnet new tool-manifest
+dotnet tool install --local dotnet-ef --version 9.0.11
+```
 ## Instalace
 
 1. Klonujte repozitář:
@@ -64,11 +72,8 @@ Testy zatim ověřují jen  správné zpracování zpráv a ukládání do datab
 ---
 
 ## Budoucí rozšíření / To-Do
-
-* [ ] Autentizace WebSocket klientů
 * [ ] Pokročilé filtrování a vyhledávání zpráv
 * [ ] Notifikace při výskytu chyb nebo výjimek
-* [ ] Ruzné typi a úrovně z
 
 ## Licence 
 
