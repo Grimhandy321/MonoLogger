@@ -74,8 +74,17 @@ namespace Monologetr.Controllers
 
                 var text = Encoding.UTF8.GetString(buffer, 0, result.Count);
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var message = new Message();
+                try
+                {
+                    message = JsonSerializer.Deserialize<Message>(text, options);
 
-                var message = JsonSerializer.Deserialize<Message>(text, options);
+                }
+                catch {
+                    await SendText(socket, "invalid_message_format");
+                    continue;
+                }
+              
 
                 if (message == null)
                 {

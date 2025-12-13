@@ -33,15 +33,14 @@ namespace MonoLogger.MIddleware
             }
 
 
-                if (string.IsNullOrWhiteSpace(authHeader) ||
-                !authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrWhiteSpace(authHeader))
             {
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 await context.Response.WriteAsync("Missing or invalid Authorization header.");
                 return;
             }
 
-            var tokenString = authHeader["Bearer ".Length..].Trim();
+            var tokenString = authHeader.Trim();
 
             if (!await ValidateTokenAsync(tokenString))
             {

@@ -25,7 +25,7 @@ namespace Tests
                 .AddJsonFile("MonoLogger/appsettings.Development.json", optional: true)
                 .Build();
 
-            _url = _config["UnitTest:authTestToken"] ?? "ws://localhost:5151/ws";
+            _url = _config["UnitTest:testUrl"] ?? "ws://localhost:5151/ws";
             _token = _config["UnitTest:authTestToken"] ?? "testToken";
         }
 

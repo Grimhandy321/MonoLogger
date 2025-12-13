@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Monologer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Tests
@@ -49,9 +51,21 @@ namespace Tests
 
                     await ws.ConnectAsync(new Uri(_url), CancellationToken.None);
                     Assert.Equal(WebSocketState.Open, ws.State);
+                    string msgJson;
+                    {
+                        var message = new Message
+                        {
+                            Text = $"hello-{Guid.NewGuid()}",
+                            Magnitude = 1,
+                            Type = MessageType.Info
+                        };
 
-                    string msg = $"hello-{Guid.NewGuid()}";
-                    byte[] buffer = Encoding.UTF8.GetBytes(msg);
+                        msgJson = JsonSerializer.Serialize(message);
+                    }
+
+                    byte[] buffer = Encoding.UTF8.GetBytes(msgJson);
+
+                    await ws.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
 
                     await ws.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
 
@@ -69,4 +83,4 @@ namespace Tests
         }
     }
 }
-}
+
