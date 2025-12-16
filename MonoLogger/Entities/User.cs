@@ -10,20 +10,19 @@ namespace MonoLogger.Entities
     {
         [Key]
         [JsonIgnore]
-        [SwaggerSchema(ReadOnly = true, WriteOnly = true)]
+        [SwaggerSchema(ReadOnly = true)]
         public int Id { get; set; }
 
         [Required]
         public string Name { get; set; } = string.Empty;
 
-        [Required]
         [JsonIgnore]
-        [SwaggerSchema(ReadOnly = true, WriteOnly = true)]
+        [SwaggerSchema(ReadOnly = true)]
         public string AccessKey { get; set; } = string.Empty;
 
 
         [JsonIgnore]
-        [SwaggerSchema(ReadOnly = true, WriteOnly = true)]
+        [SwaggerSchema(ReadOnly = true)]
         public List<Message> Messages { get; set; } = new();
     }
 }
