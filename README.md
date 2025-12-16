@@ -77,5 +77,10 @@ Testy zatim ověřují jen  správné zpracování zpráv a ukládání do datab
 
 ## Licence 
 
-
 Bude upřesněna 
+
+---
+
+## Dokumentace 
+
+Po sputeni aplikace  se na url/ swagger objeví open-api dock na vsechny endpointy 
