@@ -9,6 +9,7 @@ namespace MonoLogger.Entities
     public class User
     {
         [Key]
+        [JsonIgnore]
         [SwaggerSchema(ReadOnly = true, WriteOnly = true)]
         public int Id { get; set; }
 

@@ -16,6 +16,8 @@ namespace Monologer.Entities
     public class Message
     {
         [Key]
+        [JsonIgnore]
+        [SwaggerSchema(ReadOnly = true)]
         public int Id { get; set; }
 
         [Required]

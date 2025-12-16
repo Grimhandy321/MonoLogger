@@ -99,7 +99,26 @@ namespace Monologetr.Controllers
 
                 await SendText(socket, "accomplished");
             }
+
         }
+
+        /// <summary>
+        /// Swagger-only endpoint to document WebSocket message format.
+        /// </summary>
+        [HttpPost("message-schema")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        [SwaggerOperation(
+            Summary = "WebSocket message schema",
+            Description = "This endpoint exists only to document the JSON format expected by the WebSocket."
+        )]
+        [Consumes("application/json")]
+        public IActionResult WebSocketMessageSchema(
+            [FromBody] Message message)
+        {
+            return Ok();
+        }
+
+
 
         private async Task SendText(WebSocket socket, string message)
         {
