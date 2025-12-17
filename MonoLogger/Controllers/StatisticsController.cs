@@ -19,7 +19,7 @@ namespace MonoLogger.Controllers
         public async Task<IActionResult> GetMessageSummary()
         {
             var data = await _db.WebSocketMessages
-                .GroupBy(m => 1)
+                .GroupBy(_ => 1)
                 .Select(g => new
                 {
                     TotalMessages = g.Count(),
@@ -32,23 +32,41 @@ namespace MonoLogger.Controllers
                     UniqueUsers = g.Select(m => m.UserId).Distinct().Count(),
                     Last7DaysCount = g.Count(m => m.CreatedAt >= DateTime.UtcNow.AddDays(-7))
                 })
-                .FirstAsync();
+                .FirstOrDefaultAsync();
+
+            if (data == null)
+            {
+                return Ok(new
+                {
+                    TotalMessages = 0,
+                    ErrorCount = 0,
+                    MessageCount = 0,
+                    WarningCount = 0,
+                    AvgMagnitude = 0,
+                    MaxMagnitude = 0,
+                    MinMagnitude = 0,
+                    UniqueUsers = 0,
+                    Last7DaysCount = 0
+                });
+            }
 
             return Ok(data);
         }
-
         [HttpGet("messages/by-user")]
         public async Task<IActionResult> GetStatsByUser()
         {
             var data = await _db.WebSocketMessages
-                .GroupBy(m => m.UserId)
+                .GroupBy(m => new { m.UserId, m.User.Name })
                 .Select(g => new
                 {
-                    UserId = g.Key,
+                    UserId = g.Key.UserId,
+                    UserName = g.Key.Name,
+
                     TotalMessages = g.Count(),
                     Errors = g.Count(m => m.Type == MessageType.Error),
                     Messages = g.Count(m => m.Type == MessageType.Info),
                     Warnings = g.Count(m => m.Type == MessageType.Warning),
+
                     AvgMagnitude = g.Average(m => (double?)m.Magnitude) ?? 0,
                     FirstMessage = g.Min(m => m.CreatedAt),
                     LastMessage = g.Max(m => m.CreatedAt)
