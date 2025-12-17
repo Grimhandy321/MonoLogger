@@ -67,7 +67,7 @@ namespace Monologetr.Controllers
                 }
 
                 var text = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = false };
                 var message = new Message();
                 try
                 {
