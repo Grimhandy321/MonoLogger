@@ -29,6 +29,7 @@ cd Monologer
 2. Obnovte závislosti:
 
 ```bash
+cd Monologer
 dotnet restore
 ```
 
