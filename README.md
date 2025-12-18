@@ -215,7 +215,7 @@ socket.onopen = () => {
   const message: Message = {
     text: "Systém inicializován",
     magnitude: 1,
-    type: 'Info'
+    type: 1
   };
   socket.send(JSON.stringify(message));
 };
