@@ -14,7 +14,6 @@ MSSQL
 instalace .net ef tools 
 ```bash
 cd Monologger
-dotnet new tool-manifest
 dotnet tool install --local dotnet-ef --version 9.0.11
 ```
 ## Instalace
