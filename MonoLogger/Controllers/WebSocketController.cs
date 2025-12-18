@@ -6,6 +6,7 @@ using System.Text.Json;
 using Monologer.Entities;
 using MonoLogger.Entities;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net.Sockets;
 
 namespace Monologetr.Controllers
 {
@@ -23,14 +24,7 @@ namespace Monologetr.Controllers
             _queue = queue;
         }
 
-        /// <summary>
-        /// Initiates a WebSocket upgrade and starts the real-time messaging loop.
-        /// </summary>
-        /// <remarks>
-        /// This endpoint appears in Swagger and can be called normally.
-        /// If the request is a WebSocket upgrade request, the connection will be upgraded.
-        /// </remarks>
-        /// <returns>A status message or an upgraded WebSocket session.</returns>
+
         [HttpGet("connect")]
         [SwaggerOperation(
             Summary = "Connect to WebSocket server",
@@ -67,22 +61,15 @@ namespace Monologetr.Controllers
                 }
 
                 var text = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = false };
-                var message = new Message();
+                Message message;
                 try
                 {
-                    message = JsonSerializer.Deserialize<Message>(text, options);
+                    message = WebSocketController.DeserializedMessage(text);
 
                 }
-                catch {
-                    await SendText(socket, "invalid_message_format");
-                    continue;
-                }
-              
-
-                if (message == null)
+                catch (Exception e)
                 {
-                    await SendText(socket, "invalid_message_format");
+                    await SendText(socket, e.Message);
                     continue;
                 }
 
@@ -102,20 +89,37 @@ namespace Monologetr.Controllers
 
         }
 
-        /// <summary>
-        /// Swagger-only endpoint to document WebSocket message format.
-        /// </summary>
-        [HttpPost("message-schema")]
-        [ApiExplorerSettings(IgnoreApi = false)]
-        [SwaggerOperation(
-            Summary = "WebSocket message schema",
-            Description = "This endpoint exists only to document the JSON format expected by the WebSocket."
-        )]
-        [Consumes("application/json")]
-        public IActionResult WebSocketMessageSchema(
-            [FromBody] Message message)
+        private static Message DeserializedMessage(string text)
         {
-            return Ok();
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = false };
+            var message = JsonSerializer.Deserialize<Message>(text, options);
+            if (message == null)
+            {
+                throw new Exception("invalid_message_format");
+            }
+            if (message.Text == null)
+            {
+                throw new Exception("text_cant_be_null");
+            }
+            return message;
+        }
+
+        [HttpPost("message-schema")]
+        [Consumes("application/json")]
+        public IActionResult MessageTest([FromBody] string text)
+        {
+            Message message;
+            try
+            {
+                message = WebSocketController.DeserializedMessage(text);
+
+            }
+            catch (Exception e)
+            {
+                return Ok(e.Message);
+
+            }
+            return Ok("accomplished");
         }
 
 
