@@ -13,7 +13,7 @@ MSSQL
 ## (jen na ucitelských pc )
 instalace .net ef tools 
 ```bash
-cd Monologer
+cd Monologger
 dotnet new tool-manifest
 dotnet tool install --local dotnet-ef --version 9.0.11
 ```
@@ -29,7 +29,7 @@ cd Monologer
 2. Obnovte závislosti:
 
 ```bash
-cd Monologer
+cd Monologger
 dotnet restore
 ```
 
