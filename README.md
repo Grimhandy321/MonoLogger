@@ -1,3 +1,7 @@
+# Portfolio projektu
+https://github.com/Grimhandy321/Portfolio/tree/main
+
+
 # Monologer
 
 **Monologer** je C# aplikace na **.NET 9**, která přijímá WebSocket zprávy a ukládá je do **MS SQL Server**. Projekt slouží jako ukázka práce s WebSockety a na  paralelizací.
